@@ -21,6 +21,26 @@ Line.prototype.paint = function (ctx) {
   ctx.stroke();
 };
 
+Ellipse.prototype.paint = function (ctx) {
+  ctx.beginPath();
+  var cx = this.getCenterX();
+  var cy = this.getCenterY();
+  var rx = Math.abs(this.getRadiusX());
+  var ry = Math.abs(this.getRadiusY());
+  if (ctx.ellipse) {
+    ctx.ellipse(cx, cy, rx, ry, 0, 0, 2 * Math.PI);
+  } else {
+    ctx.save();
+    ctx.translate(cx, cy);
+    ctx.scale(rx, ry);
+    ctx.arc(0, 0, 1, 0, 2 * Math.PI, false);
+    ctx.restore();
+  }
+  ctx.strokeStyle = this.getColor();
+  ctx.lineWidth = this.getThickness();
+  ctx.stroke();
+}
+
 Drawing.prototype.paint = function (ctx, canvas) {
   ctx.fillStyle = '#F0F0F0'; // set canvas' background color
   ctx.fillRect(0, 0, canvas.width, canvas.height);
@@ -28,10 +48,6 @@ Drawing.prototype.paint = function (ctx, canvas) {
     // now fill the canvas
     eltDuTableau.paint(ctx);
   });
-
-  Shape.prototype.paint = function (ctx) {
-
-  }
 };
 
 function updateShapeList(drawing, ctx, canvas) {
@@ -66,6 +82,8 @@ function updateShapeList(drawing, ctx, canvas) {
       labelText = `Line: (${element.getInitX()}, ${element.getInitY()}) → (${element.getFinalX()}, ${element.getFinalY()})`;
     } else if (labelText === 'Rectangle') {
       labelText = `Rectangle: (${element.getInitX()}, ${element.getInitY()}) ${element.getWidth()}x${element.getHeight()}`;
+    } else if (labelText === 'Ellipse') {
+      labelText = `Ellipse: (${element.getCenterX()}, ${element.getCenterY()}) ${element.getRadiusX()}x${element.getRadiusY()}`;
     }
 
     li.appendChild(document.createTextNode(labelText));

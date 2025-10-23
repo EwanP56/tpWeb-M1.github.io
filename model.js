@@ -74,3 +74,17 @@ function Line(initX, initY, finalX, finalY, thickness, color) {
         return this.finalY;
     }
 }
+
+function Ellipse(centerX, centerY, radiusX, radiusY, thickness, color) {
+    this.centerX = centerX;
+    this.centerY = centerY;
+    this.radiusX = radiusX;
+    this.radiusY = radiusY;
+
+    Shape.call(this, color, thickness);
+
+    this.getCenterX = function() { return this.centerX; }
+    this.getCenterY = function() { return this.centerY; }
+    this.getRadiusX = function() { return this.radiusX; }
+    this.getRadiusY = function() { return this.radiusY; }
+}

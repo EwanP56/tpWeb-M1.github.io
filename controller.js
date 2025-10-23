@@ -25,9 +25,15 @@ function Pencil(ctx, drawing, canvas) {
 		if(this.currEditingMode === editingMode.line) {
 			shape = new Line(dnd.initX, dnd.initY, dnd.finalX, dnd.finalY, this.currLineWidth, this.currColour);
 		}
-		else {
+		else if(this.currEditingMode === editingMode.rect) {
 			shape = new Rectangle(dnd.initX, dnd.initY, dnd.finalX - dnd.initX, dnd.finalY - dnd.initY, this.currLineWidth, this.currColour);
-		}
+		} else if (this.currEditingMode === editingMode.ellipse) {
+            var cx = (dnd.initX + dnd.finalX) / 2;
+            var cy = (dnd.initY + dnd.finalY) / 2;
+            var rx = Math.abs(dnd.finalX - dnd.initX) / 2;
+            var ry = Math.abs(dnd.finalY - dnd.initY) / 2;
+            shape = new Ellipse(cx, cy, rx, ry, this.currLineWidth, this.currColour);
+        }
 		
 		shape.paint(ctx);
 		
@@ -38,10 +44,17 @@ function Pencil(ctx, drawing, canvas) {
 		if(this.currEditingMode === editingMode.line) {
 			shape = new Line(dnd.initX, dnd.initY, dnd.finalX, dnd.finalY, this.currLineWidth, this.currColour);
 		}
-		else {
+		else if(this.currEditingMode === editingMode.rect) {
 			shape = new Rectangle(dnd.initX, dnd.initY, dnd.finalX - dnd.initX, dnd.finalY - dnd.initY, this.currLineWidth, this.currColour);
 		}
-		
+		else if(this.currEditingMode === editingMode.ellipse) {
+            var cx = (dnd.initX + dnd.finalX) / 2;
+            var cy = (dnd.initY + dnd.finalY) / 2;
+            var rx = Math.abs(dnd.finalX - dnd.initX) / 2;
+            var ry = Math.abs(dnd.finalY - dnd.initY) / 2;
+            shape = new Ellipse(cx, cy, rx, ry, this.currLineWidth, this.currColour);
+        }
+
 		drawing.formes.push(shape)
 
 		// Met à jour la liste des formes dans la vue
@@ -53,6 +66,7 @@ function Pencil(ctx, drawing, canvas) {
 
 	var rectangleButton = document.getElementById("butRect");
 	var lineButton = document.getElementById("butLine");
+	var ellipseButton = document.getElementById("butEllipse");
 	var widthInput = document.getElementById("spinnerWidth");
 	var colorInput = document.getElementById("colour");
 	
@@ -62,6 +76,10 @@ function Pencil(ctx, drawing, canvas) {
 
 	lineButton.addEventListener("click", () => {
 		this.currEditingMode = editingMode.line
+	})
+
+	ellipseButton.addEventListener("click", () => {
+		this.currEditingMode = editingMode.ellipse
 	})
 
 	widthInput.addEventListener("change", () => {
